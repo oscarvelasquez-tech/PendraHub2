@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PENDRA - Document Directory</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #1B2A4A;
+      background-color: #ECECF0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header / Hero Area */
+    header {
+      background-color: #031B33;
+      color: #FFFFFF;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      color: #FFFFFF;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+      text-transform: uppercase;
+    }
+
+    /* Main Content Area */
+    main {
+      flex: 1;
+      background-color: #ECECF0;
+      padding: 3rem 1.5rem;
+    }
+
+    .content-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Titles & Subtitles */
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #1B2A4A;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .accent-text {
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      color: #103680;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Search Controls */
+    .search-wrapper {
+      position: relative;
+      margin-bottom: 2rem;
+      max-width: 500px;
+    }
+
+    .search-label {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #1B2A4A;
+      margin-bottom: 0.5rem;
+    }
+
+    .search-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 2.75rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      color: #1B2A4A;
+      background-color: #FFFFFF;
+      border: 2px solid rgba(27, 42, 74, 0.15);
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .search-input:focus {
+      border-color: #103680;
+      box-shadow: 0 0 0 4px rgba(16, 54, 128, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      width: 1.15rem;
+      height: 1.15rem;
+      color: rgba(27, 42, 74, 0.4);
+      pointer-events: none;
+    }
+
+    /* Table & Card Wrapper */
+    .table-card {
+      background-color: #FFFFFF;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background-color: #F8F9FA;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: rgba(27, 42, 74, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 2px solid rgba(27, 42, 74, 0.08);
+    }
+
+    td {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: #1B2A4A;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(27, 42, 74, 0.06);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: rgba(236, 236, 240, 0.3);
+    }
+
+    /* Column Widths */
+    th.col-id, td.col-id {
+      width: 80px;
+      font-weight: 600;
+    }
+
+    th.col-name, td.col-name {
+      width: 280px;
+      font-weight: 600;
+    }
+
+    th.col-desc, td.col-desc {
+      /* Takes remaining width */
+    }
+
+    /* Dynamic States Styling */
+    .state-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .spinner {
+      border: 4px solid rgba(16, 54, 128, 0.1);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border-left-color: #103680;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .state-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #1B2A4A;
+      margin-bottom: 0.5rem;
+    }
+
+    .state-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: rgba(27, 42, 74, 0.7);
+      max-width: 400px;
+      line-height: 1.5;
+    }
+
+    .error-icon {
+      font-size: 3rem;
+      color: #D32F2F;
+      margin-bottom: 1rem;
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      color: rgba(27, 42, 74, 0.3);
+      margin-bottom: 1rem;
+    }
+
+    /* Utility classes */
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        padding: 2rem 1rem;
+      }
+      .logo {
+        font-size: 2.25rem;
+      }
+      main {
+        padding: 2rem 1rem;
+      }
+      .section-title {
+        font-size: 1.85rem;
+      }
+      th, td {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Hero Area -->
+  <header role="banner">
+    <div class="header-container">
+      <h1 class="logo">PENDRA</h1>
+      <div class="header-subtitle">Enterprise Data Portal</div>
+    </div>
+  </header>
+
+  <!-- Main Section -->
+  <main>
+    <div class="content-container">
+
+      <!-- Titles -->
+      <h2 class="section-title">Who We Are</h2>
+      <p class="accent-text">Real-time information pipeline powered by Google Sheets</p>
+
+      <!-- Search Controls -->
+      <div class="search-wrapper">
+        <label for="searchInput" class="search-label">Filter Directory</label>
+        <div class="search-input-container">
+          <!-- SVG Search Icon -->
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search by name..."
+            autocomplete="off"
+            disabled
+          >
+        </div>
+      </div>
+
+      <!-- Main Display Area -->
+      <div class="table-card">
+
+        <!-- Loading State -->
+        <div id="loadingState" class="state-container">
+          <div class="spinner"></div>
+          <p class="state-title">Loading Directory...</p>
+          <p class="state-subtitle">Establishing secure connection to data source and retrieving records.</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="state-container hidden">
+          <div class="error-icon">⚠️</div>
+          <p class="state-title">Unable to Load Data</p>
+          <p id="errorMessage" class="state-subtitle">An error occurred while communicating with the server. Please refresh or try again later.</p>
+        </div>
+
+        <!-- No Results Found State -->
+        <div id="emptyState" class="state-container hidden">
+          <div class="empty-icon">🔍</div>
+          <p class="state-title">No Results Found</p>
+          <p class="state-subtitle">We couldn't find any documents matching your search term. Try checking your spelling or using different keywords.</p>
+        </div>
+
+        <!-- Data Table -->
+        <div id="tableWrapper" class="table-responsive hidden">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th scope="col" class="col-id">#</th>
+                <th scope="col" class="col-name">Name</th>
+                <th scope="col" class="col-desc">Description</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // In-memory data store for the rows
+    let allRows = [];
+    let headers = [];
+
+    // DOM Elements
+    const searchInput = document.getElementById('searchInput');
+    const loadingState = document.getElementById('loadingState');
+    const errorState = document.getElementById('errorState');
+    const errorMessage = document.getElementById('errorMessage');
+    const emptyState = document.getElementById('emptyState');
+    const tableWrapper = document.getElementById('tableWrapper');
+    const tableBody = document.getElementById('tableBody');
+
+    // On Document Loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchData();
+    });
+
+    /**
+     * Fetches data from Google Apps Script server side
+     */
+    function fetchData() {
+      // Show loading, hide others
+      showState('loading');
+
+      // Check if we are running in local test environment or mock context
+      if (typeof google === 'undefined' || !google.script || !google.script.run) {
+        // Look for mock data injected or use mock service
+        if (window.mockGetSheetData) {
+          window.mockGetSheetData()
+            .then(data => handleDataSuccess(data))
+            .catch(err => handleDataFailure(err));
+        } else {
+          // Fallback to local test mode mock values if no global mock is setup
+          setTimeout(() => {
+            const mockData = [
+              ["#", "Name", "Description"],
+              ["1", "Pendra Corporation Overview", "Detailed corporate history and our vision for the next decade of operations."],
+              ["2", "Financial Standard Operating Procedures", "Standard operating procedures for managing group budgets and financial accounts."],
+              ["3", "Human Resources Policy Handbook", "Employee expectations, benefits, and workplace code of conduct."],
+              ["4", "Brand Identity Guidelines", "Official logo usage, typography selection, color palette specification, and tone of voice."]
+            ];
+            handleDataSuccess(mockData);
+          }, 1000);
+        }
+        return;
+      }
+
+      // Live environment call
+      google.script.run
+        .withSuccessHandler(handleDataSuccess)
+        .withFailureHandler(handleDataFailure)
+        .getSheetData();
+    }
+
+    /**
+     * Handles successful data retrieval
+     */
+    function handleDataSuccess(rawValues) {
+      if (!rawValues || rawValues.length === 0) {
+        showState('empty');
+        return;
+      }
+
+      // Extract headers from the first row if appropriate
+      // We assume headers are "#", "Name", "Description"
+      // If first row starts with "#" or has headers, separate them
+      const firstRow = rawValues[0];
+      let startIdx = 0;
+
+      if (firstRow && (String(firstRow[0]).trim() === '#' || String(firstRow[1]).toLowerCase() === 'name')) {
+        headers = firstRow;
+        startIdx = 1;
+      } else {
+        headers = ["#", "Name", "Description"];
+      }
+
+      // Map rows into objects
+      allRows = rawValues.slice(startIdx).map((row, index) => {
+        return {
+          id: row[0] !== undefined ? String(row[0]) : String(index + 1),
+          name: row[1] !== undefined ? String(row[1]) : '',
+          description: row[2] !== undefined ? String(row[2]) : ''
+        };
+      });
+
+      // Enable input and render
+      searchInput.disabled = false;
+      renderTable(allRows);
+
+      // Setup Search Event Listener
+      searchInput.addEventListener('input', handleSearch);
+    }
+
+    /**
+     * Handles data retrieval failure
+     */
+    function handleDataFailure(err) {
+      console.error("Failed to load sheet data:", err);
+      if (err && err.message) {
+        errorMessage.textContent = err.message;
+      } else if (typeof err === 'string') {
+        errorMessage.textContent = err;
+      } else {
+        errorMessage.textContent = 'An error occurred while connecting to the data source. Please ensure the Spreadsheet ID is correct and sharing permissions are configured.';
+      }
+      showState('error');
+    }
+
+    /**
+     * Renders the data rows inside the table body
+     */
+    function renderTable(rowsToRender) {
+      if (rowsToRender.length === 0) {
+        showState('empty');
+        return;
+      }
+
+      showState('table');
+      tableBody.innerHTML = '';
+
+      rowsToRender.forEach(row => {
+        const tr = document.createElement('tr');
+
+        // Escape helper to prevent XSS
+        const esc = (str) => {
+          if (!str) return '';
+          return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        };
+
+        tr.innerHTML = `
+          <td class="col-id">${esc(row.id)}</td>
+          <td class="col-name">${esc(row.name)}</td>
+          <td class="col-desc">${esc(row.description)}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    /**
+     * Handles search input keyup / input changes
+     */
+    function handleSearch(e) {
+      const query = e.target.value.toLowerCase().trim();
+
+      if (!query) {
+        renderTable(allRows);
+        return;
+      }
+
+      const filtered = allRows.filter(row => {
+        return row.name.toLowerCase().includes(query);
+      });
+
+      renderTable(filtered);
+    }
+
+    /**
+     * Toggles between loading, error, empty, and table states
+     */
+    function showState(state) {
+      loadingState.classList.add('hidden');
+      errorState.classList.add('hidden');
+      emptyState.classList.add('hidden');
+      tableWrapper.classList.add('hidden');
+
+      if (state === 'loading') {
+        loadingState.classList.remove('hidden');
+      } else if (state === 'error') {
+        errorState.classList.remove('hidden');
+      } else if (state === 'empty') {
+        emptyState.classList.remove('hidden');
+      } else if (state === 'table') {
+        tableWrapper.classList.remove('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
