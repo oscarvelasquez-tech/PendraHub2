@@ -192,6 +192,18 @@
       background-color: rgba(236, 236, 240, 0.3);
     }
 
+    /* Style for links in the Name column */
+    .col-name a {
+      color: #103680;
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.15s ease-in-out;
+    }
+
+    .col-name a:hover {
+      color: #031B33;
+    }
+
     /* Column Widths */
     th.col-id, td.col-id {
       width: 80px;
@@ -408,7 +420,9 @@
               ["1", "Pendra Corporation Overview", "Detailed corporate history and our vision for the next decade of operations."],
               ["2", "Financial Standard Operating Procedures", "Standard operating procedures for managing group budgets and financial accounts."],
               ["3", "Human Resources Policy Handbook", "Employee expectations, benefits, and workplace code of conduct."],
-              ["4", "Brand Identity Guidelines", "Official logo usage, typography selection, color palette specification, and tone of voice."]
+              ["4", "Brand Identity Guidelines", "Official logo usage, typography selection, color palette specification, and tone of voice."],
+              ["5", "Google Search Portal", "https://www.google.com"],
+              ["6", "Sample Document Web Page", "http://example.com/document.pdf"]
             ];
             handleDataSuccess(mockData);
           }, 1000);
@@ -478,6 +492,16 @@
     }
 
     /**
+     * Helper to validate if a string is a valid absolute HTTP/HTTPS URL
+     */
+    function isValidUrl(str) {
+      if (!str) return false;
+      const trimmed = str.trim();
+      // Match http:// or https:// followed by typical domain structure
+      return /^https?:\/\/[^\s$.?#].[^\s]*$/i.test(trimmed);
+    }
+
+    /**
      * Renders the data rows inside the table body
      */
     function renderTable(rowsToRender) {
@@ -498,9 +522,19 @@
           return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         };
 
+        const descStr = row.description ? row.description.trim() : '';
+        const hasUrl = isValidUrl(descStr);
+
+        let nameHtml = '';
+        if (hasUrl) {
+          nameHtml = `<a href="${esc(descStr)}" target="_blank" rel="noopener noreferrer">${esc(row.name)}</a>`;
+        } else {
+          nameHtml = esc(row.name);
+        }
+
         tr.innerHTML = `
           <td class="col-id">${esc(row.id)}</td>
-          <td class="col-name">${esc(row.name)}</td>
+          <td class="col-name">${nameHtml}</td>
           <td class="col-desc">${esc(row.description)}</td>
         `;
         tableBody.appendChild(tr);
