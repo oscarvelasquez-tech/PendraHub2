@@ -205,18 +205,8 @@
     }
 
     /* Column Widths */
-    th.col-id, td.col-id {
-      width: 80px;
-      font-weight: 600;
-    }
-
     th.col-name, td.col-name {
-      width: 280px;
       font-weight: 600;
-    }
-
-    th.col-desc, td.col-desc {
-      /* Takes remaining width */
     }
 
     /* Dynamic States Styling */
@@ -363,9 +353,7 @@
           <table id="dataTable">
             <thead>
               <tr>
-                <th scope="col" class="col-id">#</th>
                 <th scope="col" class="col-name">Name</th>
-                <th scope="col" class="col-desc">Description</th>
               </tr>
             </thead>
             <tbody id="tableBody">
@@ -533,9 +521,7 @@
         }
 
         tr.innerHTML = `
-          <td class="col-id">${esc(row.id)}</td>
           <td class="col-name">${nameHtml}</td>
-          <td class="col-desc">${esc(row.description)}</td>
         `;
         tableBody.appendChild(tr);
       });
