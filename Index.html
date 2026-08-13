@@ -630,8 +630,20 @@
       // Group rows by Category (ignore empty or null category values)
       const groups = {};
       rowsToRender.forEach(row => {
-        const cat = row.category ? row.category.trim() : '';
+        let cat = row.category ? row.category.trim() : '';
         if (!cat) return; // skip empty categories
+
+        // Normalize the category to match exactly one of the three preferred names if possible.
+        // This handles trailing spaces, numbering prefixes, or case differences gracefully.
+        const norm = cat.toLowerCase().replace(/^[0-9.\s]+/, '').trim();
+        if (norm.includes("kickoff")) {
+          cat = "Before Kickoff";
+        } else if (norm.includes("launch")) {
+          cat = "Launch Materials";
+        } else if (norm.includes("hogan")) {
+          cat = "Hogan Assets";
+        }
+
         if (!groups[cat]) {
           groups[cat] = [];
         }
