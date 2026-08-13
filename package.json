@@ -4,7 +4,6 @@
   "description": "A Google Apps Script Web App for Pendra using Google Sheets as a database",
   "main": "Code.js",
   "scripts": {
-    "test:local": "node test-server.js",
     "clasp:push": "clasp push",
     "clasp:deploy": "clasp deploy"
   },
