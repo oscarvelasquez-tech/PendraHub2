@@ -37,7 +37,7 @@
       min-height: 350px;
       z-index: 1000;
       background-color: #031B33;
-      background-image: linear-gradient(rgba(3, 27, 51, 0.75), rgba(3, 27, 51, 0.75)), url('https://lh3.googleusercontent.com/d/11sGj4PUpdCEtSz9iAUA4nA-KEOsR0RT1');
+      background-image: linear-gradient(rgba(3, 27, 51, 0.75), rgba(3, 27, 51, 0.75)), url('https://drive.google.com/uc?export=view&id=11sGj4PUpdCEtSz9iAUA4nA-KEOsR0RT1');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -391,9 +391,8 @@
   <header role="banner">
     <div class="header-container">
       <div class="logo-container">
-        <img class="logo-img" src="https://lh3.googleusercontent.com/d/1jd3xki6cgyPGro-YN-gAnUPQvJzFUQxB" alt="PENDRA">
+        <img class="logo-img" src="https://drive.google.com/uc?export=view&id=1jd3xki6cgyPGro-YN-gAnUPQvJzFUQxB" alt="PENDRA">
       </div>
-      <div class="header-subtitle">Enterprise Data Portal</div>
     </div>
   </header>
 
@@ -403,7 +402,7 @@
 
       <!-- Titles -->
       <h2 class="section-title">Pendra Hub</h2>
-      <p class="accent-text">Your central resource for Pendra tools, templates, and playbooks.</p>
+      <p class="accent-text">Your central resource for Pendra tools, templates, and samples.</p>
 
       <!-- Search Controls -->
       <div class="search-wrapper">
@@ -703,6 +702,9 @@
         const isCollapsed = collapsedStates[cat];
         if (isCollapsed) {
           ul.classList.add('hidden');
+          td.style.padding = '0';
+          td.style.minWidth = '0';
+          td.style.borderRight = 'none';
         }
 
         groups[cat].forEach(row => {
