@@ -164,49 +164,61 @@
 
     th {
       background-color: #F8F9FA;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Barlow Condensed', sans-serif;
       font-weight: 700;
-      font-size: 0.85rem;
-      color: rgba(27, 42, 74, 0.6);
+      font-size: 1.25rem;
+      color: #1B2A4A;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       padding: 1.25rem 1.5rem;
       border-bottom: 2px solid rgba(27, 42, 74, 0.08);
+      border-right: 1px solid rgba(27, 42, 74, 0.08);
+      min-width: 250px;
+    }
+
+    th:last-child {
+      border-right: none;
     }
 
     td {
       font-family: 'Inter', sans-serif;
       font-size: 0.95rem;
       color: #1B2A4A;
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid rgba(27, 42, 74, 0.06);
+      padding: 1.5rem;
       vertical-align: top;
+      line-height: 1.5;
+      border-right: 1px solid rgba(27, 42, 74, 0.08);
+      min-width: 250px;
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    /* Style for lists in category columns */
+    .category-list {
+      list-style-type: disc;
+      padding-left: 1.25rem;
+    }
+
+    .category-item {
+      margin-bottom: 0.85rem;
       line-height: 1.5;
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    .category-item:last-child {
+      margin-bottom: 0;
     }
 
-    tr:hover td {
-      background-color: rgba(236, 236, 240, 0.3);
-    }
-
-    /* Style for links in the Name column */
-    .col-name a {
+    .category-item a {
       color: #103680;
       text-decoration: underline;
       font-weight: 600;
       transition: color 0.15s ease-in-out;
     }
 
-    .col-name a:hover {
+    .category-item a:hover {
       color: #031B33;
-    }
-
-    /* Column Widths */
-    th.col-name, td.col-name {
-      font-weight: 600;
     }
 
     /* Dynamic States Styling */
@@ -404,13 +416,13 @@
           // Fallback to local test mode mock values if no global mock is setup
           setTimeout(() => {
             const mockData = [
-              ["#", "Name", "Description"],
-              ["1", "Pendra Corporation Overview", "Detailed corporate history and our vision for the next decade of operations."],
-              ["2", "Financial Standard Operating Procedures", "Standard operating procedures for managing group budgets and financial accounts."],
-              ["3", "Human Resources Policy Handbook", "Employee expectations, benefits, and workplace code of conduct."],
-              ["4", "Brand Identity Guidelines", "Official logo usage, typography selection, color palette specification, and tone of voice."],
-              ["5", "Google Search Portal", "https://www.google.com"],
-              ["6", "Sample Document Web Page", "http://example.com/document.pdf"]
+              ["#", "Name", "Description", "Category"],
+              ["1", "Pendra Corporation Overview", "Detailed corporate history and our vision for the next decade of operations.", "Overview"],
+              ["2", "Financial Standard Operating Procedures", "Standard operating procedures for managing group budgets and financial accounts.", "Finance"],
+              ["3", "Human Resources Policy Handbook", "Employee expectations, benefits, and workplace code of conduct.", "Operations"],
+              ["4", "Brand Identity Guidelines", "Official logo usage, typography selection, color palette specification, and tone of voice.", "Overview"],
+              ["5", "Google Search Portal", "https://www.google.com", "Resources"],
+              ["6", "Sample Document Web Page", "http://example.com/document.pdf", "Resources"]
             ];
             handleDataSuccess(mockData);
           }, 1000);
@@ -435,8 +447,6 @@
       }
 
       // Extract headers from the first row if appropriate
-      // We assume headers are "#", "Name", "Description"
-      // If first row starts with "#" or has headers, separate them
       const firstRow = rawValues[0];
       let startIdx = 0;
 
@@ -444,15 +454,22 @@
         headers = firstRow;
         startIdx = 1;
       } else {
-        headers = ["#", "Name", "Description"];
+        headers = ["#", "Name", "Description", "Category"];
       }
+
+      // Find indices dynamically
+      const idColIdx = headers.findIndex(h => String(h).toLowerCase() === '#');
+      const nameColIdx = headers.findIndex(h => String(h).toLowerCase() === 'name');
+      const descColIdx = headers.findIndex(h => String(h).toLowerCase() === 'description');
+      const categoryColIdx = headers.findIndex(h => String(h).toLowerCase() === 'category');
 
       // Map rows into objects
       allRows = rawValues.slice(startIdx).map((row, index) => {
         return {
-          id: row[0] !== undefined ? String(row[0]) : String(index + 1),
-          name: row[1] !== undefined ? String(row[1]) : '',
-          description: row[2] !== undefined ? String(row[2]) : ''
+          id: idColIdx !== -1 && row[idColIdx] !== undefined ? String(row[idColIdx]) : String(index + 1),
+          name: nameColIdx !== -1 && row[nameColIdx] !== undefined ? String(row[nameColIdx]) : '',
+          description: descColIdx !== -1 && row[descColIdx] !== undefined ? String(row[descColIdx]) : '',
+          category: categoryColIdx !== -1 && row[categoryColIdx] !== undefined ? String(row[categoryColIdx]) : 'Other'
         };
       });
 
@@ -490,7 +507,7 @@
     }
 
     /**
-     * Renders the data rows inside the table body
+     * Renders the data rows inside the table grouped by Category
      */
     function renderTable(rowsToRender) {
       if (rowsToRender.length === 0) {
@@ -498,11 +515,51 @@
         return;
       }
 
-      showState('table');
-      tableBody.innerHTML = '';
-
+      // Group rows by Category (ignore empty or null category values)
+      const groups = {};
       rowsToRender.forEach(row => {
-        const tr = document.createElement('tr');
+        const cat = row.category ? row.category.trim() : '';
+        if (!cat) return; // skip empty categories
+        if (!groups[cat]) {
+          groups[cat] = [];
+        }
+        groups[cat].push(row);
+      });
+
+      // Get all unique active categories
+      const activeCategories = Object.keys(groups).sort();
+
+      if (activeCategories.length === 0) {
+        showState('empty');
+        return;
+      }
+
+      showState('table');
+
+      const dataTable = document.getElementById('dataTable');
+      dataTable.innerHTML = ''; // Clear table completely
+
+      // Build table header (one column for each category)
+      const thead = document.createElement('thead');
+      const headerTr = document.createElement('tr');
+      activeCategories.forEach(cat => {
+        const th = document.createElement('th');
+        th.setAttribute('scope', 'col');
+        th.textContent = cat;
+        headerTr.appendChild(th);
+      });
+      thead.appendChild(headerTr);
+      dataTable.appendChild(thead);
+
+      // Build table body with single row (one cell per category containing bulleted list)
+      const tbody = document.createElement('tbody');
+      const bodyTr = document.createElement('tr');
+
+      activeCategories.forEach(cat => {
+        const td = document.createElement('td');
+
+        const ul = document.createElement('ul');
+        ul.className = 'category-list';
 
         // Escape helper to prevent XSS
         const esc = (str) => {
@@ -510,21 +567,30 @@
           return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         };
 
-        const descStr = row.description ? row.description.trim() : '';
-        const hasUrl = isValidUrl(descStr);
+        groups[cat].forEach(row => {
+          const li = document.createElement('li');
+          li.className = 'category-item';
 
-        let nameHtml = '';
-        if (hasUrl) {
-          nameHtml = `<a href="${esc(descStr)}" target="_blank" rel="noopener noreferrer">${esc(row.name)}</a>`;
-        } else {
-          nameHtml = esc(row.name);
-        }
+          const descStr = row.description ? row.description.trim() : '';
+          const hasUrl = isValidUrl(descStr);
 
-        tr.innerHTML = `
-          <td class="col-name">${nameHtml}</td>
-        `;
-        tableBody.appendChild(tr);
+          let nameHtml = '';
+          if (hasUrl) {
+            nameHtml = `<a href="${esc(descStr)}" target="_blank" rel="noopener noreferrer">${esc(row.name)}</a>`;
+          } else {
+            nameHtml = esc(row.name);
+          }
+
+          li.innerHTML = nameHtml;
+          ul.appendChild(li);
+        });
+
+        td.appendChild(ul);
+        bodyTr.appendChild(td);
       });
+
+      tbody.appendChild(bodyTr);
+      dataTable.appendChild(tbody);
     }
 
     /**
