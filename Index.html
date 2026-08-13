@@ -180,6 +180,35 @@
       border-right: none;
     }
 
+    th.clickable {
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    th.clickable:hover {
+      background-color: #ECECF0;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .chevron-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: transform 0.2s ease-in-out;
+      color: rgba(27, 42, 74, 0.6);
+      flex-shrink: 0;
+    }
+
+    .chevron-icon.expanded {
+      transform: rotate(180deg);
+    }
+
     td {
       font-family: 'Inter', sans-serif;
       font-size: 0.95rem;
@@ -380,9 +409,13 @@
   </main>
 
   <script>
-    // In-memory data store for the rows
+    // In-memory data stores
     let allRows = [];
     let headers = [];
+
+    // Track collapsed/expanded state of categories (categoryName -> boolean)
+    // By default, category sections are collapsed (true)
+    let collapsedStates = {};
 
     // DOM Elements
     const searchInput = document.getElementById('searchInput');
@@ -397,6 +430,14 @@
     document.addEventListener('DOMContentLoaded', () => {
       fetchData();
     });
+
+    /**
+     * Escape helper to prevent XSS
+     */
+    function esc(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
 
     /**
      * Fetches data from Google Apps Script server side
@@ -473,9 +514,9 @@
         };
       });
 
-      // Enable input and render
+      // Enable input and render (default collapsed)
       searchInput.disabled = false;
-      renderTable(allRows);
+      renderTable(allRows, false);
 
       // Setup Search Event Listener
       searchInput.addEventListener('input', handleSearch);
@@ -509,7 +550,7 @@
     /**
      * Renders the data rows inside the table grouped by Category
      */
-    function renderTable(rowsToRender) {
+    function renderTable(rowsToRender, isSearchActive) {
       if (rowsToRender.length === 0) {
         showState('empty');
         return;
@@ -534,6 +575,17 @@
         return;
       }
 
+      // Sync and maintain collapse states
+      activeCategories.forEach(cat => {
+        if (isSearchActive) {
+          // Auto expand categories with matching query results
+          collapsedStates[cat] = false;
+        } else if (collapsedStates[cat] === undefined) {
+          // Default state: Collapsed (true)
+          collapsedStates[cat] = true;
+        }
+      });
+
       showState('table');
 
       const dataTable = document.getElementById('dataTable');
@@ -545,7 +597,25 @@
       activeCategories.forEach(cat => {
         const th = document.createElement('th');
         th.setAttribute('scope', 'col');
-        th.textContent = cat;
+        th.className = 'col-category clickable';
+
+        const isCollapsed = collapsedStates[cat];
+
+        th.innerHTML = `
+          <div class="header-content">
+            <span>${esc(cat)}</span>
+            <svg class="chevron-icon ${isCollapsed ? '' : 'expanded'}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        `;
+
+        // Add click listener to independently toggle collapse/expand
+        th.addEventListener('click', () => {
+          collapsedStates[cat] = !collapsedStates[cat];
+          renderTable(rowsToRender, isSearchActive);
+        });
+
         headerTr.appendChild(th);
       });
       thead.appendChild(headerTr);
@@ -561,11 +631,10 @@
         const ul = document.createElement('ul');
         ul.className = 'category-list';
 
-        // Escape helper to prevent XSS
-        const esc = (str) => {
-          if (!str) return '';
-          return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        };
+        const isCollapsed = collapsedStates[cat];
+        if (isCollapsed) {
+          ul.classList.add('hidden');
+        }
 
         groups[cat].forEach(row => {
           const li = document.createElement('li');
@@ -600,7 +669,11 @@
       const query = e.target.value.toLowerCase().trim();
 
       if (!query) {
-        renderTable(allRows);
+        // Reset to default collapsed state when search is cleared
+        Object.keys(collapsedStates).forEach(cat => {
+          collapsedStates[cat] = true;
+        });
+        renderTable(allRows, false);
         return;
       }
 
@@ -608,7 +681,7 @@
         return row.name.toLowerCase().includes(query);
       });
 
-      renderTable(filtered);
+      renderTable(filtered, true);
     }
 
     /**
