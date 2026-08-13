@@ -638,8 +638,25 @@
         groups[cat].push(row);
       });
 
-      // Get all unique active categories
-      const activeCategories = Object.keys(groups).sort();
+      // Preferred display order for category columns
+      const PREFERRED_ORDER = ["Before Kickoff", "Launch Materials", "Hogan Assets"];
+
+      // Get all unique active categories sorted by custom order
+      const activeCategories = Object.keys(groups).sort((a, b) => {
+        const indexA = PREFERRED_ORDER.indexOf(a);
+        const indexB = PREFERRED_ORDER.indexOf(b);
+
+        if (indexA !== -1 && indexB !== -1) {
+          return indexA - indexB;
+        }
+        if (indexA !== -1) {
+          return -1; // a comes first
+        }
+        if (indexB !== -1) {
+          return 1; // b comes first
+        }
+        return a.localeCompare(b);
+      });
 
       if (activeCategories.length === 0) {
         showState('empty');
