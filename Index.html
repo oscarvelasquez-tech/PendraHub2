@@ -112,6 +112,224 @@
       margin-top: max(50vh, 350px);
     }
 
+    /* ==========================================================================
+       Penn Interactive Guide Styles
+       ========================================================================== */
+    #pennContainer {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      pointer-events: none; /* Passes clicks through container */
+    }
+
+    /* Speech Bubble */
+    .penn-speech-bubble {
+      pointer-events: auto;
+      background: #FFFFFF;
+      color: #1B2A4A;
+      border: 1px solid #D0D5DD;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(3, 27, 51, 0.12);
+      margin-bottom: 10px;
+      max-width: 240px;
+      position: relative;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .penn-speech-bubble.hidden {
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+    }
+
+    .penn-speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      right: 36px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #FFFFFF;
+    }
+
+    .penn-speech-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -9px;
+      right: 35px;
+      width: 0;
+      height: 0;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 9px solid #D0D5DD;
+    }
+
+    /* Help Panel Popover */
+    .penn-help-panel {
+      pointer-events: auto;
+      background: #FFFFFF;
+      border: 1px solid #D0D5DD;
+      border-radius: 12px;
+      padding: 18px 20px;
+      width: 280px;
+      box-shadow: 0 10px 30px rgba(3, 27, 51, 0.2);
+      margin-bottom: 12px;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transform-origin: bottom right;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .penn-help-panel.hidden {
+      opacity: 0;
+      transform: translateY(12px) scale(0.95);
+      pointer-events: none;
+      display: none;
+    }
+
+    .penn-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .penn-panel-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1B2A4A;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .penn-panel-close {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      color: #667085;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .penn-panel-close:hover {
+      background: #ECECF0;
+      color: #1B2A4A;
+    }
+
+    .penn-panel-body {
+      font-size: 0.875rem;
+      color: #1B2A4A;
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .penn-actions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .penn-action-btn {
+      background: #F8F9FA;
+      border: 1px solid #E4E7EC;
+      color: #103680;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .penn-action-btn:hover {
+      background: #ECECF0;
+      border-color: #D0D5DD;
+      color: #1B2A4A;
+    }
+
+    .penn-action-btn.hidden {
+      display: none;
+    }
+
+    /* Penn Avatar Button */
+    .penn-avatar-btn {
+      pointer-events: auto;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      position: relative;
+      outline: none;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .penn-avatar-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .penn-avatar-btn:focus-visible {
+      outline: 2px solid #103680;
+      outline-offset: 4px;
+      border-radius: 50%;
+    }
+
+    .penn-image {
+      width: 110px;
+      height: 125px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 12px rgba(3, 27, 51, 0.25));
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .penn-image.transitioning {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+
+    /* Responsive adjustments for Penn */
+    @media (max-width: 768px) {
+      #pennContainer {
+        bottom: 16px;
+        right: 16px;
+      }
+
+      .penn-image {
+        width: 80px;
+        height: 90px;
+      }
+
+      .penn-speech-bubble {
+        max-width: 200px;
+        font-size: 0.8125rem;
+        padding: 8px 12px;
+      }
+
+      .penn-help-panel {
+        width: 250px;
+        padding: 14px 16px;
+      }
+    }
+
     .content-container {
       max-width: 1100px;
       margin: 0 auto;
@@ -501,6 +719,41 @@
     </div>
   </main>
 
+  <!-- Penn Guide Container -->
+  <div id="pennContainer" aria-label="Penn Assistant">
+    <!-- Help Panel Modal -->
+    <div id="pennHelpPanel" class="penn-help-panel hidden" role="dialog" aria-labelledby="pennPanelTitle" aria-modal="false">
+      <div class="penn-panel-header">
+        <span id="pennPanelTitle" class="penn-panel-title">Penn Guide</span>
+        <button id="pennPanelClose" class="penn-panel-close" aria-label="Close help panel">&times;</button>
+      </div>
+      <div class="penn-panel-body">
+        Hi, I'm Penn. I can help you navigate tools, templates, and document resources across the directory.
+      </div>
+      <div class="penn-actions-list">
+        <button id="pennActionFocus" class="penn-action-btn">
+          <span>🔍</span> Focus Search
+        </button>
+        <button id="pennActionBrowse" class="penn-action-btn">
+          <span>📂</span> Browse All Resources
+        </button>
+        <button id="pennActionClear" class="penn-action-btn hidden">
+          <span>❌</span> Clear Search
+        </button>
+      </div>
+    </div>
+
+    <!-- Speech Bubble -->
+    <div id="pennSpeechBubble" class="penn-speech-bubble">
+      Hi! I'm Penn.
+    </div>
+
+    <!-- Avatar Button -->
+    <button id="pennAvatarBtn" class="penn-avatar-btn" aria-label="Penn, the Pendra Hub guide. Click for options.">
+      <img id="pennImage" class="penn-image" src="assets/penn/penn-hello.png" alt="Penn, the Pendra Hub guide">
+    </button>
+  </div>
+
   <script>
     // In-memory data stores
     let allRows = [];
@@ -823,7 +1076,17 @@
           collapsedStates[cat] = true;
         });
         renderTable(allRows, false);
+
+        // Notify Penn of search state change
+        if (window.Penn) {
+          Penn.onSearchUpdate('', allRows.length);
+        }
         return;
+      }
+
+      // Notify Penn that user is typing / searching
+      if (window.Penn) {
+        Penn.onSearchTyping();
       }
 
       const filtered = allRows.filter(row => {
@@ -831,7 +1094,234 @@
       });
 
       renderTable(filtered, true);
+
+      // Notify Penn of results
+      if (window.Penn) {
+        Penn.onSearchUpdate(query, filtered.length);
+      }
     }
+
+    /* ==========================================================================
+       Penn Interactive Controller Module
+       ========================================================================== */
+    const Penn = (() => {
+      // States mapping to local image asset paths
+      const STATES = {
+        HELLO: { img: 'assets/penn/penn-hello.png', bubble: "Hi! I'm Penn.", duration: 2500 },
+        DEFAULT: { img: 'assets/penn/penn-default.png', bubble: "Hi! I'm Penn.", duration: 0 },
+        SEARCHING: { img: 'assets/penn/penn-searching.png', bubble: 'Searching...', duration: 0 },
+        FOUND: { img: 'assets/penn/penn-found.png', duration: 0 },
+        NO_RESULTS: { img: 'assets/penn/penn-no-results.png', bubble: "I couldn't find a match. Try another keyword.", duration: 0 }
+      };
+
+      let currentState = 'HELLO';
+      let isPanelOpen = false;
+      let helloTimeout = null;
+      let typingTimeout = null;
+
+      // DOM Elements
+      const imgEl = document.getElementById('pennImage');
+      const bubbleEl = document.getElementById('pennSpeechBubble');
+      const avatarBtn = document.getElementById('pennAvatarBtn');
+      const panelEl = document.getElementById('pennHelpPanel');
+      const closeBtn = document.getElementById('pennPanelClose');
+      const focusBtn = document.getElementById('pennActionFocus');
+      const browseBtn = document.getElementById('pennActionBrowse');
+      const clearBtn = document.getElementById('pennActionClear');
+
+      /**
+       * Preloads image assets for instant transitions
+       */
+      function preloadImages() {
+        Object.values(STATES).forEach(st => {
+          const img = new Image();
+          img.src = st.img;
+        });
+      }
+
+      /**
+       * Swaps Penn's visual state and speech bubble text
+       */
+      function setState(stateKey, customBubbleMessage = null) {
+        if (!STATES[stateKey]) return;
+
+        currentState = stateKey;
+        const config = STATES[stateKey];
+
+        // Smooth image swap transition
+        imgEl.classList.add('transitioning');
+
+        setTimeout(() => {
+          imgEl.src = config.img;
+          imgEl.classList.remove('transitioning');
+        }, 150);
+
+        // Determine message text
+        let message = customBubbleMessage || config.bubble;
+        if (stateKey === 'FOUND' && !customBubbleMessage) {
+          message = "I found resources for you.";
+        }
+
+        if (message && !isPanelOpen) {
+          bubbleEl.textContent = message;
+          bubbleEl.classList.remove('hidden');
+        } else {
+          bubbleEl.classList.add('hidden');
+        }
+      }
+
+      /**
+       * Initializes Penn module
+       */
+      function init() {
+        preloadImages();
+
+        // Initial Hello state on page load
+        setState('HELLO');
+
+        // Transition Hello -> Default after duration
+        helloTimeout = setTimeout(() => {
+          if (currentState === 'HELLO') {
+            setState('DEFAULT');
+            // Hide initial bubble after a moment
+            setTimeout(() => {
+              if (currentState === 'DEFAULT' && !isPanelOpen) {
+                bubbleEl.classList.add('hidden');
+              }
+            }, 3000);
+          }
+        }, STATES.HELLO.duration);
+
+        // Click Avatar to toggle Help Panel
+        avatarBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleHelpPanel();
+        });
+
+        // Close Panel button
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeHelpPanel();
+        });
+
+        // Focus Search Action
+        focusBtn.addEventListener('click', () => {
+          closeHelpPanel();
+          searchInput.focus();
+        });
+
+        // Browse All Resources Action
+        browseBtn.addEventListener('click', () => {
+          closeHelpPanel();
+          // Expand all categories
+          Object.keys(collapsedStates).forEach(cat => {
+            collapsedStates[cat] = false;
+          });
+          renderTable(allRows, false);
+          // Scroll table into view
+          const card = document.querySelector('.table-card');
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+
+        // Clear Search Action
+        clearBtn.addEventListener('click', () => {
+          closeHelpPanel();
+          searchInput.value = '';
+          handleSearch({ target: searchInput });
+          searchInput.focus();
+        });
+
+        // Close panel when clicking outside or pressing Escape
+        document.addEventListener('click', (e) => {
+          if (isPanelOpen && !pennContainer.contains(e.target)) {
+            closeHelpPanel();
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && isPanelOpen) {
+            closeHelpPanel();
+          }
+        });
+      }
+
+      /**
+       * Toggle help panel popover visibility
+       */
+      function toggleHelpPanel() {
+        if (isPanelOpen) {
+          closeHelpPanel();
+        } else {
+          openHelpPanel();
+        }
+      }
+
+      function openHelpPanel() {
+        isPanelOpen = true;
+        panelEl.classList.remove('hidden');
+        bubbleEl.classList.add('hidden'); // Hide speech bubble when panel is open
+
+        // Show/Hide Clear Search button based on search input value
+        if (searchInput.value.trim().length > 0) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+
+      function closeHelpPanel() {
+        isPanelOpen = false;
+        panelEl.classList.add('hidden');
+      }
+
+      /**
+       * Event hook when user types in search input
+       */
+      function onSearchTyping() {
+        if (helloTimeout) clearTimeout(helloTimeout);
+        if (typingTimeout) clearTimeout(typingTimeout);
+
+        setState('SEARCHING');
+      }
+
+      /**
+       * Event hook when search filtering finishes
+       */
+      function onSearchUpdate(query, count) {
+        if (helloTimeout) clearTimeout(helloTimeout);
+        if (typingTimeout) clearTimeout(typingTimeout);
+
+        // Debounce result state change slightly to prevent flickering during rapid typing
+        typingTimeout = setTimeout(() => {
+          if (!query) {
+            setState('DEFAULT');
+            bubbleEl.classList.add('hidden');
+            return;
+          }
+
+          if (count > 0) {
+            const countText = count === 1 ? '1 resource' : `${count} resources`;
+            setState('FOUND', `I found ${countText}.`);
+          } else {
+            setState('NO_RESULTS');
+          }
+        }, 200);
+      }
+
+      return {
+        init,
+        setState,
+        onSearchTyping,
+        onSearchUpdate
+      };
+    })();
+
+    // Initialize Penn on DOM Ready
+    document.addEventListener('DOMContentLoaded', () => {
+      Penn.init();
+    });
 
     /**
      * Toggles between loading, error, empty, and table states
