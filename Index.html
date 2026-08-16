@@ -828,6 +828,7 @@
       }
 
       // Live environment call
+      console.log('Initiating google.script.run.getSheetData()...');
       google.script.run
         .withSuccessHandler(handleDataSuccess)
         .withFailureHandler(handleDataFailure)
@@ -838,6 +839,7 @@
      * Handles successful data retrieval
      */
     function handleDataSuccess(rawValues) {
+      console.log('Received data from server:', rawValues);
       if (!rawValues || rawValues.length === 0) {
         showState('empty');
         return;
@@ -1120,6 +1122,7 @@
       let typingTimeout = null;
 
       // DOM Elements
+      const pennContainerEl = document.getElementById('pennContainer');
       const imgEl = document.getElementById('pennImage');
       const bubbleEl = document.getElementById('pennSpeechBubble');
       const avatarBtn = document.getElementById('pennAvatarBtn');
@@ -1235,7 +1238,7 @@
 
         // Close panel when clicking outside or pressing Escape
         document.addEventListener('click', (e) => {
-          if (isPanelOpen && !pennContainer.contains(e.target)) {
+          if (isPanelOpen && pennContainerEl && !pennContainerEl.contains(e.target)) {
             closeHelpPanel();
           }
         });
