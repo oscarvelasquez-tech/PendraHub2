@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PENDRA - Document Directory</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #1B2A4A;
+      background-color: #FFFFFF;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header / Hero Area */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50vh;
+      min-height: 350px;
+      z-index: 1000;
+      background-color: #031B33;
+      background-image: linear-gradient(rgba(3, 27, 51, 0.75), rgba(3, 27, 51, 0.75)), url('https://drive.google.com/thumbnail?id=1wZ2kUdVMScOftXc7OdmBtEja7SUAivGO&sz=w1920');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1), min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    header.collapsed {
+      height: 120px;
+      min-height: 120px;
+    }
+
+    .header-container {
+      position: relative;
+      max-width: 1100px;
+      width: 100%;
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .logo-container {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1), top 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    header.collapsed .logo-container {
+      left: 1.5rem;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+
+    .logo-img {
+      max-width: 100%;
+      height: auto;
+      max-height: 120px;
+      object-fit: contain;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    header.collapsed .logo-img {
+      max-height: 50px;
+    }
+
+    .header-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+      text-transform: uppercase;
+      transition: font-size 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    header.shrunk .header-subtitle {
+      font-size: 0.85rem;
+    }
+
+    /* Main Content Area */
+    main {
+      flex: 1;
+      background-color: #ECECF0; /* Refined to brand lower section background */
+      padding: 4rem 1.5rem;
+      margin-top: max(50vh, 350px);
+    }
+
+    /* ==========================================================================
+       Penn Interactive Guide Styles
+       ========================================================================== */
+    #pennContainer {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      pointer-events: none; /* Passes clicks through container */
+    }
+
+    /* Speech Bubble */
+    .penn-speech-bubble {
+      pointer-events: auto;
+      background: #FFFFFF;
+      color: #1B2A4A;
+      border: 1px solid #D0D5DD;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(3, 27, 51, 0.12);
+      margin-bottom: 10px;
+      max-width: 240px;
+      position: relative;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .penn-speech-bubble.hidden {
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+    }
+
+    .penn-speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      right: 36px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #FFFFFF;
+    }
+
+    .penn-speech-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -9px;
+      right: 35px;
+      width: 0;
+      height: 0;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 9px solid #D0D5DD;
+    }
+
+    /* Help Panel Popover */
+    .penn-help-panel {
+      pointer-events: auto;
+      background: #FFFFFF;
+      border: 1px solid #D0D5DD;
+      border-radius: 12px;
+      padding: 18px 20px;
+      width: 280px;
+      box-shadow: 0 10px 30px rgba(3, 27, 51, 0.2);
+      margin-bottom: 12px;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transform-origin: bottom right;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .penn-help-panel.hidden {
+      opacity: 0;
+      transform: translateY(12px) scale(0.95);
+      pointer-events: none;
+      display: none;
+    }
+
+    .penn-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .penn-panel-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1B2A4A;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .penn-panel-close {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      color: #667085;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .penn-panel-close:hover {
+      background: #ECECF0;
+      color: #1B2A4A;
+    }
+
+    .penn-panel-body {
+      font-size: 0.875rem;
+      color: #1B2A4A;
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .penn-actions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .penn-action-btn {
+      background: #F8F9FA;
+      border: 1px solid #E4E7EC;
+      color: #103680;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .penn-action-btn:hover {
+      background: #ECECF0;
+      border-color: #D0D5DD;
+      color: #1B2A4A;
+    }
+
+    .penn-action-btn.hidden {
+      display: none;
+    }
+
+    /* Penn Avatar Button */
+    .penn-avatar-btn {
+      pointer-events: auto;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      position: relative;
+      outline: none;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .penn-avatar-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .penn-avatar-btn:focus-visible {
+      outline: 2px solid #103680;
+      outline-offset: 4px;
+      border-radius: 50%;
+    }
+
+    .penn-image {
+      width: 110px;
+      height: 125px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 12px rgba(3, 27, 51, 0.25));
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .penn-image.transitioning {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+
+    /* Responsive adjustments for Penn */
+    @media (max-width: 768px) {
+      #pennContainer {
+        bottom: 16px;
+        right: 16px;
+      }
+
+      .penn-image {
+        width: 80px;
+        height: 90px;
+      }
+
+      .penn-speech-bubble {
+        max-width: 200px;
+        font-size: 0.8125rem;
+        padding: 8px 12px;
+      }
+
+      .penn-help-panel {
+        width: 250px;
+        padding: 14px 16px;
+      }
+    }
+
+    .content-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Titles & Subtitles */
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1B2A4A;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.35rem;
+    }
+
+    .accent-text {
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      color: #103680;
+      font-size: 1.05rem;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* Search Controls */
+    .search-wrapper {
+      position: relative;
+      margin-bottom: 2.5rem;
+      max-width: 450px;
+    }
+
+    .search-label {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #1B2A4A;
+      margin-bottom: 0.6rem;
+    }
+
+    .search-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.95rem 1.25rem 0.95rem 2.85rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: #1B2A4A;
+      background-color: #FFFFFF;
+      border: 1px solid rgba(27, 42, 74, 0.18);
+      border-radius: 4px; /* More architectural, less round for PE brand */
+      outline: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .search-input:focus {
+      border-color: #1B2A4A;
+      box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.08);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.1rem;
+      width: 1.1rem;
+      height: 1.1rem;
+      color: rgba(27, 42, 74, 0.5);
+      pointer-events: none;
+    }
+
+    /* Table & Card Wrapper */
+    .table-card {
+      background-color: #FFFFFF;
+      border-radius: 4px; /* Sleeker, structured PE brand */
+      box-shadow: 0 2px 12px rgba(27, 42, 74, 0.05);
+      border: 1px solid rgba(27, 42, 74, 0.1);
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background-color: #FFFFFF;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #1B2A4A;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 1.5rem 1.75rem;
+      border-bottom: 2px solid rgba(27, 42, 74, 0.15);
+      border-right: 1px solid rgba(27, 42, 74, 0.08);
+      min-width: 280px;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    th.clickable {
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    th.clickable:hover {
+      background-color: #ECECF0;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .chevron-icon {
+      width: 1rem;
+      height: 1rem;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      color: rgba(27, 42, 74, 0.7);
+      flex-shrink: 0;
+    }
+
+    .chevron-icon.expanded {
+      transform: rotate(180deg);
+    }
+
+    td {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: #1B2A4A;
+      padding: 1.75rem;
+      vertical-align: top;
+      line-height: 1.6;
+      border-right: 1px solid rgba(27, 42, 74, 0.08);
+      min-width: 280px;
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    /* Style for lists in category columns */
+    .category-list {
+      list-style-type: none; /* No default bullets */
+      padding-left: 0;
+    }
+
+    .category-item {
+      margin-bottom: 1.1rem;
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+    }
+
+    .category-item:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Prepend Indicators (Checklist vs Document Icon) */
+    .item-icon {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      flex-shrink: 0;
+      color: #103680;
+      user-select: none;
+    }
+
+    .item-checkbox {
+      color: #1B2A4A;
+      opacity: 0.85;
+    }
+
+    .item-doc {
+      color: #103680;
+      opacity: 0.85;
+    }
+
+    .item-content {
+      flex: 1;
+    }
+
+    .category-item a {
+      color: #103680;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+      border-bottom: 1px solid transparent;
+    }
+
+    .category-item a:hover {
+      color: #1B2A4A;
+      border-bottom-color: #1B2A4A;
+    }
+
+    /* Dynamic States Styling */
+    .state-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .spinner {
+      border: 4px solid rgba(16, 54, 128, 0.1);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border-left-color: #103680;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .state-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #1B2A4A;
+      margin-bottom: 0.5rem;
+    }
+
+    .state-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: rgba(27, 42, 74, 0.7);
+      max-width: 400px;
+      line-height: 1.5;
+    }
+
+    .error-icon {
+      font-size: 3rem;
+      color: #D32F2F;
+      margin-bottom: 1rem;
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      color: rgba(27, 42, 74, 0.3);
+      margin-bottom: 1rem;
+    }
+
+    /* Utility classes */
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        height: 35vh;
+        min-height: 220px;
+      }
+      header.collapsed {
+        height: 90px;
+        min-height: 90px;
+      }
+      .header-container {
+        padding: 0 1rem;
+      }
+      header.collapsed .logo-container {
+        left: 1rem;
+        transform: translate(0, -50%);
+      }
+      .logo-img {
+        max-height: 80px;
+      }
+      header.collapsed .logo-img {
+        max-height: 40px;
+      }
+      main {
+        padding: 2rem 1rem;
+        margin-top: max(35vh, 220px);
+      }
+      .section-title {
+        font-size: 1.85rem;
+      }
+      th, td {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Hero Area -->
+  <header role="banner">
+    <div class="header-container">
+      <div class="logo-container">
+        <img class="logo-img" src="https://drive.google.com/thumbnail?id=1xXTu9WI4vvM-iIO-sMeWE2WG_WU60zs7&sz=w1000" alt="PENDRA">
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Section -->
+  <main>
+    <div class="content-container">
+
+      <!-- Titles -->
+      <h2 class="section-title">Pendra Hub</h2>
+      <p class="accent-text">Your central resource for Pendra tools, templates, and samples.</p>
+
+      <!-- Search Controls -->
+      <div class="search-wrapper">
+        <label for="searchInput" class="search-label">Filter Directory</label>
+        <div class="search-input-container">
+          <!-- SVG Search Icon -->
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search by name..."
+            autocomplete="off"
+            disabled
+          >
+        </div>
+      </div>
+
+      <!-- Main Display Area -->
+      <div class="table-card">
+
+        <!-- Loading State -->
+        <div id="loadingState" class="state-container">
+          <div class="spinner"></div>
+          <p class="state-title">Loading Directory...</p>
+          <p class="state-subtitle">Establishing secure connection to data source and retrieving records.</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="state-container hidden">
+          <div class="error-icon">⚠️</div>
+          <p class="state-title">Unable to Load Data</p>
+          <p id="errorMessage" class="state-subtitle">An error occurred while communicating with the server. Please refresh or try again later.</p>
+        </div>
+
+        <!-- No Results Found State -->
+        <div id="emptyState" class="state-container hidden">
+          <div class="empty-icon">🔍</div>
+          <p class="state-title">No Results Found</p>
+          <p class="state-subtitle">We couldn't find any documents matching your search term. Try checking your spelling or using different keywords.</p>
+        </div>
+
+        <!-- Data Table -->
+        <div id="tableWrapper" class="table-responsive hidden">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th scope="col" class="col-name">Name</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Penn Guide Container -->
+  <div id="pennContainer" aria-label="Penn Assistant">
+    <!-- Help Panel Modal -->
+    <div id="pennHelpPanel" class="penn-help-panel hidden" role="dialog" aria-labelledby="pennPanelTitle" aria-modal="false">
+      <div class="penn-panel-header">
+        <span id="pennPanelTitle" class="penn-panel-title">Penn Guide</span>
+        <button id="pennPanelClose" class="penn-panel-close" aria-label="Close help panel">&times;</button>
+      </div>
+      <div class="penn-panel-body">
+        Hi, I'm Penn. I can help you navigate tools, templates, and document resources across the directory.
+      </div>
+      <div class="penn-actions-list">
+        <button id="pennActionFocus" class="penn-action-btn">
+          <span>🔍</span> Focus Search
+        </button>
+        <button id="pennActionBrowse" class="penn-action-btn">
+          <span>📂</span> Browse All Resources
+        </button>
+        <button id="pennActionClear" class="penn-action-btn hidden">
+          <span>❌</span> Clear Search
+        </button>
+      </div>
+    </div>
+
+    <!-- Speech Bubble -->
+    <div id="pennSpeechBubble" class="penn-speech-bubble">
+      Hi! I'm Penn.
+    </div>
+
+    <!-- Avatar Button -->
+    <button id="pennAvatarBtn" class="penn-avatar-btn" aria-label="Penn, the Pendra Hub guide. Click for options.">
+      <img id="pennImage" class="penn-image" src="https://drive.google.com/thumbnail?id=1bQZIiOhEgghkURKcuGm8rlYdT8XzfCmt&sz=w1000" alt="Penn, the Pendra Hub guide">
+    </button>
+  </div>
+
+  <script>
+    // In-memory data stores
+    let allRows = [];
+    let headers = [];
+
+    // Track collapsed/expanded state of categories (categoryName -> boolean)
+    // By default, category sections are collapsed (true)
+    let collapsedStates = {};
+
+    // DOM Elements
+    const searchInput = document.getElementById('searchInput');
+    const loadingState = document.getElementById('loadingState');
+    const errorState = document.getElementById('errorState');
+    const errorMessage = document.getElementById('errorMessage');
+    const emptyState = document.getElementById('emptyState');
+    const tableWrapper = document.getElementById('tableWrapper');
+    const tableBody = document.getElementById('tableBody');
+
+    // On Document Loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchData();
+
+      // Scroll event listener for shrinking header
+      window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 50) {
+          header.classList.add('collapsed');
+        } else {
+          header.classList.remove('collapsed');
+        }
+      });
+    });
+
+    /**
+     * Escape helper to prevent XSS
+     */
+    function esc(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    /**
+     * Fetches data from Google Apps Script server side
+     */
+    function fetchData() {
+      // Show loading, hide others
+      showState('loading');
+
+      // Check if we are running in local test environment or mock context
+      if (typeof google === 'undefined' || !google.script || !google.script.run) {
+        // Look for mock data injected or use mock service
+        if (window.mockGetSheetData) {
+          window.mockGetSheetData()
+            .then(data => handleDataSuccess(data))
+            .catch(err => handleDataFailure(err));
+        } else {
+          // Fallback to local test mode mock values if no global mock is setup
+          setTimeout(() => {
+            const mockData = [
+              ["#", "Name", "Description", "Category"],
+              ["1", "Pendra Corporation Overview", "Detailed corporate history and our vision for the next decade of operations.", "Overview"],
+              ["2", "Financial Standard Operating Procedures", "Standard operating procedures for managing group budgets and financial accounts.", "Finance"],
+              ["3", "Human Resources Policy Handbook", "Employee expectations, benefits, and workplace code of conduct.", "Operations"],
+              ["4", "Brand Identity Guidelines", "Official logo usage, typography selection, color palette specification, and tone of voice.", "Overview"],
+              ["5", "Google Search Portal", "https://www.google.com", "Resources"],
+              ["6", "Sample Document Web Page", "http://example.com/document.pdf", "Resources"]
+            ];
+            handleDataSuccess(mockData);
+          }, 1000);
+        }
+        return;
+      }
+
+      // Live environment call
+      console.log('Initiating google.script.run.getSheetData()...');
+      google.script.run
+        .withSuccessHandler(handleDataSuccess)
+        .withFailureHandler(handleDataFailure)
+        .getSheetData();
+    }
+
+    /**
+     * Handles successful data retrieval
+     */
+    function handleDataSuccess(rawValues) {
+      console.log('Received data from server:', rawValues);
+      if (!rawValues || rawValues.length === 0) {
+        showState('empty');
+        return;
+      }
+
+      // Extract headers from the first row if appropriate
+      const firstRow = rawValues[0];
+      let startIdx = 0;
+
+      if (firstRow && (String(firstRow[0]).trim() === '#' || String(firstRow[1]).toLowerCase() === 'name')) {
+        headers = firstRow;
+        startIdx = 1;
+      } else {
+        headers = ["#", "Name", "Description", "Category"];
+      }
+
+      // Find indices dynamically
+      const idColIdx = headers.findIndex(h => String(h).toLowerCase() === '#');
+      const nameColIdx = headers.findIndex(h => String(h).toLowerCase() === 'name');
+      const descColIdx = headers.findIndex(h => String(h).toLowerCase() === 'description');
+      const categoryColIdx = headers.findIndex(h => String(h).toLowerCase() === 'category');
+
+      // Map rows into objects
+      allRows = rawValues.slice(startIdx).map((row, index) => {
+        return {
+          id: idColIdx !== -1 && row[idColIdx] !== undefined ? String(row[idColIdx]) : String(index + 1),
+          name: nameColIdx !== -1 && row[nameColIdx] !== undefined ? String(row[nameColIdx]) : '',
+          description: descColIdx !== -1 && row[descColIdx] !== undefined ? String(row[descColIdx]) : '',
+          category: categoryColIdx !== -1 && row[categoryColIdx] !== undefined ? String(row[categoryColIdx]) : 'Other'
+        };
+      });
+
+      // Enable input and render (default collapsed)
+      searchInput.disabled = false;
+      renderTable(allRows, false);
+
+      // Setup Search Event Listener
+      searchInput.addEventListener('input', handleSearch);
+    }
+
+    /**
+     * Handles data retrieval failure
+     */
+    function handleDataFailure(err) {
+      console.error("Failed to load sheet data:", err);
+      if (err && err.message) {
+        errorMessage.textContent = err.message;
+      } else if (typeof err === 'string') {
+        errorMessage.textContent = err;
+      } else {
+        errorMessage.textContent = 'An error occurred while connecting to the data source. Please ensure the Spreadsheet ID is correct and sharing permissions are configured.';
+      }
+      showState('error');
+    }
+
+    /**
+     * Helper to validate if a string is a valid absolute HTTP/HTTPS URL
+     */
+    function isValidUrl(str) {
+      if (!str) return false;
+      const trimmed = str.trim();
+      // Match http:// or https:// followed by typical domain structure
+      return /^https?:\/\/[^\s$.?#].[^\s]*$/i.test(trimmed);
+    }
+
+    /**
+     * Renders the data rows inside the table grouped by Category
+     */
+    function renderTable(rowsToRender, isSearchActive) {
+      if (rowsToRender.length === 0) {
+        showState('empty');
+        return;
+      }
+
+      // Group rows by Category (ignore empty or null category values)
+      const groups = {};
+      rowsToRender.forEach(row => {
+        let cat = row.category ? row.category.trim() : '';
+        if (!cat) return; // skip empty categories
+
+        // Normalize the category to match exactly one of the three preferred names if possible.
+        // This handles trailing spaces, numbering prefixes, or case differences gracefully.
+        const norm = cat.toLowerCase().replace(/^[0-9.\s]+/, '').trim();
+        if (norm.includes("kickoff")) {
+          cat = "Before Kickoff";
+        } else if (norm.includes("launch")) {
+          cat = "Launch Materials";
+        } else if (norm.includes("hogan")) {
+          cat = "Hogan Assets";
+        }
+
+        if (!groups[cat]) {
+          groups[cat] = [];
+        }
+        groups[cat].push(row);
+      });
+
+      // Preferred display order for category columns
+      const PREFERRED_ORDER = ["Before Kickoff", "Launch Materials", "Hogan Assets"];
+
+      // Get all unique active categories sorted by custom order
+      const activeCategories = Object.keys(groups).sort((a, b) => {
+        const indexA = PREFERRED_ORDER.indexOf(a);
+        const indexB = PREFERRED_ORDER.indexOf(b);
+
+        if (indexA !== -1 && indexB !== -1) {
+          return indexA - indexB;
+        }
+        if (indexA !== -1) {
+          return -1; // a comes first
+        }
+        if (indexB !== -1) {
+          return 1; // b comes first
+        }
+        return a.localeCompare(b);
+      });
+
+      if (activeCategories.length === 0) {
+        showState('empty');
+        return;
+      }
+
+      // Sync and maintain collapse states
+      activeCategories.forEach(cat => {
+        if (isSearchActive) {
+          // Auto expand categories with matching query results
+          collapsedStates[cat] = false;
+        } else if (collapsedStates[cat] === undefined) {
+          // Default state: Collapsed (true)
+          collapsedStates[cat] = true;
+        }
+      });
+
+      showState('table');
+
+      const dataTable = document.getElementById('dataTable');
+      dataTable.innerHTML = ''; // Clear table completely
+
+      // Build table header (one column for each category)
+      const thead = document.createElement('thead');
+      const headerTr = document.createElement('tr');
+      activeCategories.forEach(cat => {
+        const th = document.createElement('th');
+        th.setAttribute('scope', 'col');
+        th.className = 'col-category clickable';
+
+        const isCollapsed = collapsedStates[cat];
+
+        th.innerHTML = `
+          <div class="header-content">
+            <span>${esc(cat)}</span>
+            <svg class="chevron-icon ${isCollapsed ? '' : 'expanded'}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        `;
+
+        // Add click listener to independently toggle collapse/expand
+        th.addEventListener('click', () => {
+          collapsedStates[cat] = !collapsedStates[cat];
+          renderTable(rowsToRender, isSearchActive);
+        });
+
+        headerTr.appendChild(th);
+      });
+      thead.appendChild(headerTr);
+      dataTable.appendChild(thead);
+
+      // Build table body with single row (one cell per category containing bulleted list)
+      const tbody = document.createElement('tbody');
+      const bodyTr = document.createElement('tr');
+
+      activeCategories.forEach(cat => {
+        const td = document.createElement('td');
+
+        const ul = document.createElement('ul');
+        ul.className = 'category-list';
+
+        const isCollapsed = collapsedStates[cat];
+        if (isCollapsed) {
+          ul.classList.add('hidden');
+          td.style.padding = '0';
+          td.style.minWidth = '0';
+          td.style.borderRight = 'none';
+        }
+
+        groups[cat].forEach(row => {
+          const li = document.createElement('li');
+          li.className = 'category-item';
+
+          const descStr = row.description ? row.description.trim() : '';
+          const hasUrl = isValidUrl(descStr);
+
+          // Build content HTML
+          let contentHtml = '';
+          if (hasUrl) {
+            contentHtml = `<a href="${esc(descStr)}" target="_blank" rel="noopener noreferrer">${esc(row.name)}</a>`;
+          } else {
+            contentHtml = esc(row.name);
+          }
+
+          // Prepend icons depending on category to visually distinguish checklist from files
+          let iconHtml = '';
+          if (cat === "Before Kickoff") {
+            // Checklist style checkbox (☐)
+            iconHtml = `<span class="item-icon item-checkbox" aria-hidden="true">&#9744;</span>`;
+          } else {
+            // Document style icon (📄)
+            iconHtml = `<span class="item-icon item-doc" aria-hidden="true">&#128196;</span>`;
+          }
+
+          li.innerHTML = `
+            ${iconHtml}
+            <div class="item-content">${contentHtml}</div>
+          `;
+          ul.appendChild(li);
+        });
+
+        td.appendChild(ul);
+        bodyTr.appendChild(td);
+      });
+
+      tbody.appendChild(bodyTr);
+      dataTable.appendChild(tbody);
+    }
+
+    /**
+     * Handles search input keyup / input changes
+     */
+    function handleSearch(e) {
+      const query = e.target.value.toLowerCase().trim();
+
+      if (!query) {
+        // Reset to default collapsed state when search is cleared
+        Object.keys(collapsedStates).forEach(cat => {
+          collapsedStates[cat] = true;
+        });
+        renderTable(allRows, false);
+
+        // Notify Penn of search state change
+        if (window.Penn) {
+          Penn.onSearchUpdate('', allRows.length);
+        }
+        return;
+      }
+
+      // Notify Penn that user is typing / searching
+      if (window.Penn) {
+        Penn.onSearchTyping();
+      }
+
+      const filtered = allRows.filter(row => {
+        return row.name.toLowerCase().includes(query);
+      });
+
+      renderTable(filtered, true);
+
+      // Notify Penn of results
+      if (window.Penn) {
+        Penn.onSearchUpdate(query, filtered.length);
+      }
+    }
+
+    /* ==========================================================================
+       Penn Interactive Controller Module
+       ========================================================================== */
+    const Penn = (() => {
+      // States mapping to local image asset paths
+      const STATES = {
+        HELLO: { img: 'https://drive.google.com/thumbnail?id=1bQZIiOhEgghkURKcuGm8rlYdT8XzfCmt&sz=w1000', bubble: "Hi! I'm Penn.", duration: 2500 },
+        DEFAULT: { img: 'https://drive.google.com/thumbnail?id=1bQZIiOhEgghkURKcuGm8rlYdT8XzfCmt&sz=w1000', bubble: "Hi! I'm Penn.", duration: 0 },
+        SEARCHING: { img: 'https://drive.google.com/thumbnail?id=1bQZIiOhEgghkURKcuGm8rlYdT8XzfCmt&sz=w1000', bubble: 'Searching...', duration: 0 },
+        FOUND: { img: 'https://drive.google.com/thumbnail?id=1bQZIiOhEgghkURKcuGm8rlYdT8XzfCmt&sz=w1000', duration: 0 },
+        NO_RESULTS: { img: 'https://drive.google.com/thumbnail?id=1bQZIiOhEgghkURKcuGm8rlYdT8XzfCmt&sz=w1000', bubble: "I couldn't find a match. Try another keyword.", duration: 0 }
+      };
+
+      let currentState = 'HELLO';
+      let isPanelOpen = false;
+      let helloTimeout = null;
+      let typingTimeout = null;
+
+      // DOM Elements
+      const pennContainerEl = document.getElementById('pennContainer');
+      const imgEl = document.getElementById('pennImage');
+      const bubbleEl = document.getElementById('pennSpeechBubble');
+      const avatarBtn = document.getElementById('pennAvatarBtn');
+      const panelEl = document.getElementById('pennHelpPanel');
+      const closeBtn = document.getElementById('pennPanelClose');
+      const focusBtn = document.getElementById('pennActionFocus');
+      const browseBtn = document.getElementById('pennActionBrowse');
+      const clearBtn = document.getElementById('pennActionClear');
+
+      /**
+       * Preloads image assets for instant transitions
+       */
+      function preloadImages() {
+        Object.values(STATES).forEach(st => {
+          const img = new Image();
+          img.src = st.img;
+        });
+      }
+
+      /**
+       * Swaps Penn's visual state and speech bubble text
+       */
+      function setState(stateKey, customBubbleMessage = null) {
+        if (!STATES[stateKey]) return;
+
+        currentState = stateKey;
+        const config = STATES[stateKey];
+
+        // Smooth image swap transition
+        imgEl.classList.add('transitioning');
+
+        setTimeout(() => {
+          imgEl.src = config.img;
+          imgEl.classList.remove('transitioning');
+        }, 150);
+
+        // Determine message text
+        let message = customBubbleMessage || config.bubble;
+        if (stateKey === 'FOUND' && !customBubbleMessage) {
+          message = "I found resources for you.";
+        }
+
+        if (message && !isPanelOpen) {
+          bubbleEl.textContent = message;
+          bubbleEl.classList.remove('hidden');
+        } else {
+          bubbleEl.classList.add('hidden');
+        }
+      }
+
+      /**
+       * Initializes Penn module
+       */
+      function init() {
+        preloadImages();
+
+        // Initial Hello state on page load
+        setState('HELLO');
+
+        // Transition Hello -> Default after duration
+        helloTimeout = setTimeout(() => {
+          if (currentState === 'HELLO') {
+            setState('DEFAULT');
+            // Hide initial bubble after a moment
+            setTimeout(() => {
+              if (currentState === 'DEFAULT' && !isPanelOpen) {
+                bubbleEl.classList.add('hidden');
+              }
+            }, 3000);
+          }
+        }, STATES.HELLO.duration);
+
+        // Click Avatar to toggle Help Panel
+        avatarBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleHelpPanel();
+        });
+
+        // Close Panel button
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeHelpPanel();
+        });
+
+        // Focus Search Action
+        focusBtn.addEventListener('click', () => {
+          closeHelpPanel();
+          searchInput.focus();
+        });
+
+        // Browse All Resources Action
+        browseBtn.addEventListener('click', () => {
+          closeHelpPanel();
+          // Expand all categories
+          Object.keys(collapsedStates).forEach(cat => {
+            collapsedStates[cat] = false;
+          });
+          renderTable(allRows, false);
+          // Scroll table into view
+          const card = document.querySelector('.table-card');
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+
+        // Clear Search Action
+        clearBtn.addEventListener('click', () => {
+          closeHelpPanel();
+          searchInput.value = '';
+          handleSearch({ target: searchInput });
+          searchInput.focus();
+        });
+
+        // Close panel when clicking outside or pressing Escape
+        document.addEventListener('click', (e) => {
+          if (isPanelOpen && pennContainerEl && !pennContainerEl.contains(e.target)) {
+            closeHelpPanel();
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && isPanelOpen) {
+            closeHelpPanel();
+          }
+        });
+      }
+
+      /**
+       * Toggle help panel popover visibility
+       */
+      function toggleHelpPanel() {
+        if (isPanelOpen) {
+          closeHelpPanel();
+        } else {
+          openHelpPanel();
+        }
+      }
+
+      function openHelpPanel() {
+        isPanelOpen = true;
+        panelEl.classList.remove('hidden');
+        bubbleEl.classList.add('hidden'); // Hide speech bubble when panel is open
+
+        // Show/Hide Clear Search button based on search input value
+        if (searchInput.value.trim().length > 0) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+
+      function closeHelpPanel() {
+        isPanelOpen = false;
+        panelEl.classList.add('hidden');
+      }
+
+      /**
+       * Event hook when user types in search input
+       */
+      function onSearchTyping() {
+        if (helloTimeout) clearTimeout(helloTimeout);
+        if (typingTimeout) clearTimeout(typingTimeout);
+
+        setState('SEARCHING');
+      }
+
+      /**
+       * Event hook when search filtering finishes
+       */
+      function onSearchUpdate(query, count) {
+        if (helloTimeout) clearTimeout(helloTimeout);
+        if (typingTimeout) clearTimeout(typingTimeout);
+
+        // Debounce result state change slightly to prevent flickering during rapid typing
+        typingTimeout = setTimeout(() => {
+          if (!query) {
+            setState('DEFAULT');
+            bubbleEl.classList.add('hidden');
+            return;
+          }
+
+          if (count > 0) {
+            const countText = count === 1 ? '1 resource' : `${count} resources`;
+            setState('FOUND', `I found ${countText}.`);
+          } else {
+            setState('NO_RESULTS');
+          }
+        }, 200);
+      }
+
+      return {
+        init,
+        setState,
+        onSearchTyping,
+        onSearchUpdate
+      };
+    })();
+
+    // Initialize Penn on DOM Ready
+    document.addEventListener('DOMContentLoaded', () => {
+      Penn.init();
+    });
+
+    /**
+     * Toggles between loading, error, empty, and table states
+     */
+    function showState(state) {
+      loadingState.classList.add('hidden');
+      errorState.classList.add('hidden');
+      emptyState.classList.add('hidden');
+      tableWrapper.classList.add('hidden');
+
+      if (state === 'loading') {
+        loadingState.classList.remove('hidden');
+      } else if (state === 'error') {
+        errorState.classList.remove('hidden');
+      } else if (state === 'empty') {
+        emptyState.classList.remove('hidden');
+      } else if (state === 'table') {
+        tableWrapper.classList.remove('hidden');
+      }
+    }
+  </script>
+</body>
+</html>

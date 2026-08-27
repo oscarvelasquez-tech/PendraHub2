@@ -1,0 +1,21 @@
+{
+  "name": "pendra-sheet-portal",
+  "version": "1.0.0",
+  "description": "A Google Apps Script Web App for Pendra using Google Sheets as a database",
+  "main": "Code.js",
+  "scripts": {
+    "clasp:push": "clasp push",
+    "clasp:deploy": "clasp deploy"
+  },
+  "keywords": [
+    "google-apps-script",
+    "google-sheets",
+    "clasp",
+    "web-app"
+  ],
+  "author": "Pendra Developer",
+  "license": "MIT",
+  "devDependencies": {
+    "@google/clasp": "^2.4.2"
+  }
+}
